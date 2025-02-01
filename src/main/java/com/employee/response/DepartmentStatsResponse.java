@@ -1,0 +1,15 @@
+package com.employee.response;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class DepartmentStatsResponse {
+
+	private String departmentName;
+	private Integer employeeCount;
+
+}
