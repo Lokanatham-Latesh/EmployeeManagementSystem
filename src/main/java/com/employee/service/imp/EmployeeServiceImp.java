@@ -48,7 +48,7 @@ public class EmployeeServiceImp implements EmployeeService {
 	private DepartmentServiceImp departmentService;
 
 	/**
-	 * Description of Code : Saves a new employee with the provided details.
+	 * Description: Saves a new employee with the provided details.
 	 * 
 	 * @param employeeRequest The employee details.
 	 * @return saved employee details.
@@ -76,7 +76,7 @@ public class EmployeeServiceImp implements EmployeeService {
 	}
 
 	/**
-	 * Description of Code : Retrieves an employee by ID.
+	 * Description: Retrieves an employee by ID.
 	 * 
 	 * @param id The employee ID.
 	 * @return ResponseEntity containing the employee details.
@@ -93,7 +93,7 @@ public class EmployeeServiceImp implements EmployeeService {
 	}
 
 	/**
-	 * Description of Code: Deletes an employee by ID.
+	 * Description: Deletes an employee by ID.
 	 * 
 	 * @param id The employee ID.
 	 * @return ResponseEntity containing a Boolean value indicating success.
@@ -282,7 +282,7 @@ public class EmployeeServiceImp implements EmployeeService {
 	}
 
 	/**
-	 * Description of Code: Retrieves paginated list of employees sorted by salary
+	 * Description: Retrieves paginated list of employees sorted by salary
 	 * in descending order.
 	 * 
 	 * @param page The page number to fetch, starting from 0.
@@ -316,7 +316,7 @@ public class EmployeeServiceImp implements EmployeeService {
 	}
 
 	/**
-	 * Description of Code: Retrieves a list of employees along with their
+	 * Description: Retrieves a list of employees along with their
 	 * associated departments.
 	 * 
 	 * @return ResponseEntity containing a list of employees with department
@@ -343,7 +343,7 @@ public class EmployeeServiceImp implements EmployeeService {
 	}
 
 	/**
-	 * Description of Code: Transfers an employee from one department to another.
+	 * Description: Transfers an employee from one department to another.
 	 * 
 	 * @param fromDepartmentId The ID of the source department.
 	 * @param toDepartmentId   The ID of the destination department.
@@ -391,7 +391,7 @@ public class EmployeeServiceImp implements EmployeeService {
 	}
 
 	/**
-	 * Description of Code: Updates the salary of all employees by a specified
+	 * Description: Updates the salary of all employees by a specified
 	 * percentage.
 	 * 
 	 * @param percentage The percentage by which to increase the salaries.
@@ -421,7 +421,7 @@ public class EmployeeServiceImp implements EmployeeService {
 	}
 
 	/**
-	 * Description of Code: Retrieves an employee by ID and acts as helper method.
+	 * Description: Retrieves an employee by ID and acts as helper method.
 	 * 
 	 * @param id The employee ID.
 	 * @return The Employee entity if found.

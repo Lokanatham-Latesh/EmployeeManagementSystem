@@ -9,8 +9,7 @@ import io.swagger.v3.oas.models.info.Info;
 @Configuration
 public class SwaggerConfig {
 	/**
-	 * 
-	 * 
+	 * Configures the OpenAPI documentation for the Employee Management System API.
 	 */
 	@Bean
 	OpenAPI myCustomConfig() {

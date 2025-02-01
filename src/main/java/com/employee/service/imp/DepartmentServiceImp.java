@@ -29,7 +29,7 @@ public class DepartmentServiceImp implements DepartmentService {
 	private DepartmentRepository departmentRepository;
 
 	/**
-	 * Description of Code: Adds a new department to the system.
+	 * Description: Adds a new department to the system.
 	 * 
 	 * @param departmentRequest The details of the department to be added.
 	 * @return ResponseEntity containing the added department details.
@@ -58,7 +58,7 @@ public class DepartmentServiceImp implements DepartmentService {
 	}
 
 	/**
-	 * Description of Code: Retrieves a department by its ID.
+	 * Description : Retrieves a department by its ID.
 	 * 
 	 * @param id The ID of the department to retrieve.
 	 * @return ResponseEntity containing the department details.
@@ -72,7 +72,7 @@ public class DepartmentServiceImp implements DepartmentService {
 	}
 
 	/**
-	 * Description of Code: Deletes a department by its ID.
+	 * Description: Deletes a department by its ID.
 	 * 
 	 * @param id The ID of the department to delete.
 	 * @return ResponseEntity indicating whether the department was successfully
@@ -96,7 +96,7 @@ public class DepartmentServiceImp implements DepartmentService {
 	}
 
 	/**
-	 * Description of Code: Retrieves all departments with pagination support.
+	 * Description: Retrieves all departments with pagination support.
 	 * 
 	 * @param page The page number.
 	 * @param size The size of each page.
@@ -150,7 +150,7 @@ public class DepartmentServiceImp implements DepartmentService {
 	
 	
 	/**
-	 * Description of Code: Retrieves a department by ID and acts as helper method.
+	 * Description : Retrieves a department by ID and acts as helper method.
 	 * 
 	 * @param id The department ID.
 	 * @return The Department entity if found.
