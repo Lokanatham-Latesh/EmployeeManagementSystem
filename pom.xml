@@ -1,30 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.4.2</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.mindfire.employeesystem</groupId>
 	<artifactId>EmployeeManagementSystem</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>EmployeeManagementSystem</name>
-	<description>The Employee Management System is a Spring Boot-based application that allows organizations to manage employee records, including CRUD operations, salary updates, and department assignments. It leverages JPA for entity mapping, relationships, and querying, with support for pagination, sorting, and validation. The system also demonstrates transaction management and bulk operations for salary updates.</description>
-	<url/>
+	<description>The Employee Management System is a Spring Boot-based
+		application that allows organizations to manage employee records,
+		including CRUD operations, salary updates, and department assignments.
+		It leverages JPA for entity mapping, relationships, and querying, with
+		support for pagination, sorting, and validation. The system also
+		demonstrates transaction management and bulk operations for salary
+		updates.</description>
+	<url />
 	<licenses>
-		<license/>
+		<license />
 	</licenses>
 	<developers>
-		<developer/>
+		<developer />
 	</developers>
 	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
+		<connection />
+		<developerConnection />
+		<tag />
+		<url />
 	</scm>
 	<properties>
 		<java.version>17</java.version>
@@ -68,6 +75,12 @@
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>2.8.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>3.2.0</version>
 		</dependency>
 	</dependencies>
 

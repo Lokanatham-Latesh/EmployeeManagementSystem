@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.dao.DataAccessException;
@@ -30,9 +31,6 @@ import com.employee.response.DepartmentResponse;
 import com.employee.response.EmployeeResponse;
 import com.employee.response.EmployeeWithDepartmentResponse;
 import com.employee.service.EmployeeService;
-import com.employee.util.DepartmentResponseMapper;
-import com.employee.util.EmployeeRequestMapper;
-import com.employee.util.EmployeeResponseMapper;
 import com.employee.validator.ValidatorConstant;
 
 @Service
@@ -47,6 +45,9 @@ public class EmployeeServiceImp implements EmployeeService {
 	@Autowired
 	private DepartmentServiceImp departmentService;
 
+	@Autowired
+	private ModelMapper modelMapper;
+
 	/**
 	 * Description: Saves a new employee with the provided details.
 	 * 
@@ -56,12 +57,11 @@ public class EmployeeServiceImp implements EmployeeService {
 	@Override
 	public EmployeeResponse addEmployee(EmployeeRequest employeeRequest) {
 
-		Employee employee = EmployeeRequestMapper.mapToEmployee(employeeRequest);
+		Employee employee = modelMapper.map(employeeRequest, Employee.class);
 
 		try {
 			Employee savedEmployee = employeeRepository.save(employee);
-			EmployeeResponse employeeResponse = EmployeeResponseMapper.mapToEmployeeResponse(savedEmployee);
-			return employeeResponse;
+			return modelMapper.map(savedEmployee, EmployeeResponse.class);
 
 		} catch (DataIntegrityViolationException ex) {
 
@@ -89,7 +89,8 @@ public class EmployeeServiceImp implements EmployeeService {
 					.forBadRequest(ValidatorConstant.EMPLOYEE_ID_POSITIVE_MESSAGE);
 			throw new EmployeeSystemException.InvalidRequestException(problemDetails);
 		}
-		return (EmployeeResponseMapper.mapToEmployeeResponse(findEmployeeById(id)));
+		Employee employee = findEmployeeById(id);
+		return modelMapper.map(employee, EmployeeResponse.class);
 	}
 
 	/**
@@ -106,9 +107,18 @@ public class EmployeeServiceImp implements EmployeeService {
 			department.getEmployees().remove(employee);
 		});
 
-		employeeRepository.delete(employee);
+		try {
+			employeeRepository.delete(employee);
+			return true;
+		}
 
-		return true;
+		catch (Exception ex) {
+			ProblemDetails problemDetails = ProblemDetails
+					.forInternalError(ValidatorConstant.INTERNAL_ERROR_DELETE + ex.getMessage());
+			throw new EmployeeSystemException.InternalServerErrorException(problemDetails);
+
+		}
+
 	}
 
 	/**
@@ -134,8 +144,7 @@ public class EmployeeServiceImp implements EmployeeService {
 		try {
 
 			Employee updatedEmployee = employeeRepository.save(employee);
-			EmployeeResponse employeeResponse = EmployeeResponseMapper.mapToEmployeeResponse(updatedEmployee);
-			return employeeResponse;
+			return modelMapper.map(updatedEmployee, EmployeeResponse.class);
 		} catch (Exception ex) {
 			ProblemDetails problemDetails = new ProblemDetails(HttpStatus.INTERNAL_SERVER_ERROR.value(),
 					ValidatorConstant.INTERNAL_ERROR_UPDATE + ex.getMessage());
@@ -201,12 +210,8 @@ public class EmployeeServiceImp implements EmployeeService {
 			throw new EmployeeSystemException.EmployeeNotFoundException(problemDetails);
 		}
 
-		List<EmployeeResponse> employeeResponses = employees.stream().map(employee -> {
-			EmployeeResponse employeeResponse = EmployeeResponseMapper.mapToEmployeeResponse(employee);
-			return employeeResponse;
-		}).collect(Collectors.toList());
-
-		return employeeResponses;
+		return employees.stream().map(employee -> modelMapper.map(employee, EmployeeResponse.class))
+				.collect(Collectors.toList());
 	}
 
 	/**
@@ -231,9 +236,7 @@ public class EmployeeServiceImp implements EmployeeService {
 			throw new EmployeeSystemException.EmployeeNotFoundException(new ProblemDetails(HttpStatus.NOT_FOUND.value(),
 					ValidatorConstant.NO_EMPLOYEES_FOUND_SALARY_GREATER_THAN + salary));
 		}
-
-		return (employees.stream().map(emp -> EmployeeResponseMapper.mapToEmployeeResponse(emp))
-				.collect(Collectors.toList()));
+		return employees.stream().map(emp -> modelMapper.map(emp, EmployeeResponse.class)).collect(Collectors.toList());
 	}
 
 	/**
@@ -254,8 +257,7 @@ public class EmployeeServiceImp implements EmployeeService {
 					ValidatorConstant.NO_EMPLOYEES_JOINED_LAST_6_MONTHS));
 		}
 
-		return employees.stream().map(emp -> EmployeeResponseMapper.mapToEmployeeResponse(emp))
-				.collect(Collectors.toList());
+		return employees.stream().map(emp -> modelMapper.map(emp, EmployeeResponse.class)).collect(Collectors.toList());
 	}
 
 	/**
@@ -273,17 +275,13 @@ public class EmployeeServiceImp implements EmployeeService {
 			throw new EmployeeSystemException.EmployeeNotFoundException(problemDetails);
 		}
 
-		List<EmployeeResponse> employeeResponses = topEmployees.stream().map(employee -> {
-			EmployeeResponse employeeResponse = EmployeeResponseMapper.mapToEmployeeResponse(employee);
-			return employeeResponse;
-		}).collect(Collectors.toList());
-
-		return employeeResponses;
+		return topEmployees.stream().map(emp -> modelMapper.map(emp, EmployeeResponse.class))
+				.collect(Collectors.toList());
 	}
 
 	/**
-	 * Description: Retrieves paginated list of employees sorted by salary
-	 * in descending order.
+	 * Description: Retrieves paginated list of employees sorted by salary in
+	 * descending order.
 	 * 
 	 * @param page The page number to fetch, starting from 0.
 	 * @return ResponseEntity containing the list of employees for the given page or
@@ -307,17 +305,13 @@ public class EmployeeServiceImp implements EmployeeService {
 			throw new EmployeeSystemException.EmployeeNotFoundException(problemDetails);
 		}
 
-		List<EmployeeResponse> employeeResponses = employeePage
-				.getContent().stream().map(employee -> new EmployeeResponse(employee.getId(), employee.getName(),
-						employee.getEmail(), employee.getSalary(), employee.getDateOfJoining()))
+		return employeePage.getContent().stream().map(employee -> modelMapper.map(employee, EmployeeResponse.class))
 				.collect(Collectors.toList());
-
-		return employeeResponses;
 	}
 
 	/**
-	 * Description: Retrieves a list of employees along with their
-	 * associated departments.
+	 * Description: Retrieves a list of employees along with their associated
+	 * departments.
 	 * 
 	 * @return ResponseEntity containing a list of employees with department
 	 *         details.
@@ -332,14 +326,14 @@ public class EmployeeServiceImp implements EmployeeService {
 
 		}
 
-		return (employees.stream().map(employee -> {
+		return employees.stream().map(employee -> {
 			List<DepartmentResponse> departmentResponses = employee.getDepartments().stream()
-					.map(department -> DepartmentResponseMapper.mapToDepartmentResponse(department))
+					.map(department -> modelMapper.map(department, DepartmentResponse.class))
 					.collect(Collectors.toList());
 
 			return new EmployeeWithDepartmentResponse(employee.getId(), employee.getName(), employee.getEmail(),
 					employee.getSalary(), employee.getDateOfJoining(), departmentResponses);
-		}).collect(Collectors.toList()));
+		}).collect(Collectors.toList());
 	}
 
 	/**
@@ -391,8 +385,7 @@ public class EmployeeServiceImp implements EmployeeService {
 	}
 
 	/**
-	 * Description: Updates the salary of all employees by a specified
-	 * percentage.
+	 * Description: Updates the salary of all employees by a specified percentage.
 	 * 
 	 * @param percentage The percentage by which to increase the salaries.
 	 * @return ResponseEntity containing the result of the bulk salary update

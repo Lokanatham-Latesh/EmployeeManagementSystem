@@ -3,6 +3,7 @@ package com.employee.service.imp;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -19,7 +20,7 @@ import com.employee.request.DepartmentRequest;
 import com.employee.response.DepartmentResponse;
 import com.employee.response.DepartmentStatsResponse;
 import com.employee.service.DepartmentService;
-import com.employee.util.DepartmentResponseMapper;
+
 import com.employee.validator.ValidatorConstant;
 
 @Service
@@ -27,6 +28,9 @@ public class DepartmentServiceImp implements DepartmentService {
 
 	@Autowired
 	private DepartmentRepository departmentRepository;
+	
+	@Autowired
+	private ModelMapper mapper;
 
 	/**
 	 * Description: Adds a new department to the system.
@@ -45,7 +49,7 @@ public class DepartmentServiceImp implements DepartmentService {
 
 			Department department = departmentRepository.save(newDepartment);
 
-			return DepartmentResponseMapper.mapToDepartmentResponse(department);
+			  return mapper.map(department, DepartmentResponse.class);
 		} catch (DataIntegrityViolationException ex) {
 
 			ProblemDetails problemDetails = new ProblemDetails(HttpStatus.CONFLICT.value(), ValidatorConstant.DUPLICATE_DEPARTMENT);
@@ -67,7 +71,7 @@ public class DepartmentServiceImp implements DepartmentService {
 	public DepartmentResponse getDepartmentById(Long id) {
 
 		Department department = findDepartmentById(id);
-		return DepartmentResponseMapper.mapToDepartmentResponse(department);
+		  return mapper.map(department, DepartmentResponse.class);
 
 	}
 
@@ -116,7 +120,7 @@ public class DepartmentServiceImp implements DepartmentService {
 		}
 
 		return (departments.map(department -> {
-			return DepartmentResponseMapper.mapToDepartmentResponse(department);
+			  return mapper.map(department, DepartmentResponse.class);
 		}));
 	}
 
